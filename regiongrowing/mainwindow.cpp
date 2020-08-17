@@ -63,7 +63,7 @@ MainWindow::MainWindow(QWidget *parent) :
     }else
     {
      qDebug()<<"数据库打开成功"<<endl;
-     query.exec("create table regiongrowing(errorname varchar(100) not null,errornum int not null)");
+     query.exec("create table regiongrowing(errorname varchar(100) not null,errornum int not null)");//创建regiongrowing表
     }
 
     //原图片窗口
@@ -164,12 +164,12 @@ void MainWindow::wheelEvent(QWheelEvent *event)
     }
 }
 
-void MainWindow::displayImage(HImage srcImg,HTuple hv_Window)
+void MainWindow::displayImage(HImage srcImg,HTuple hv_Window)//显示放缩后的图像
 {
-    double dWidth = srcImg.Width().I();
-    double dHeight = srcImg.Height().I();
-    double dWidth2 = dWidth / zoom_scale;
-    double dHeight2 = dHeight / zoom_scale;
+    double dWidth = srcImg.Width().I();//原图片宽度
+    double dHeight = srcImg.Height().I();//原图片高度
+    double dWidth2 = dWidth / zoom_scale;//放缩后的图片宽度
+    double dHeight2 = dHeight / zoom_scale;//放缩后的图片高度
     if (dHeight / 2 - dHeight2 / 2 >= m_dYOffset && dHeight / 2 + dHeight2 / 2 - m_dYOffset <= dHeight)
     {
         m_dDispImagePartRow0 = dHeight / 2 - dHeight2 / 2 - m_dYOffset;
@@ -208,7 +208,7 @@ void MainWindow::displayImage(HImage srcImg,HTuple hv_Window)
     DispObj(srcImg, hv_Window);
 }
 
-void MainWindow::moveWnd(QPoint point, HImage srcImg, HTuple hWindow)
+void MainWindow::moveWnd(QPoint point, HImage srcImg, HTuple hWindow)//鼠标移动事件
 {
 
     QRect m_rPic=ui->label_old->rect();
@@ -293,7 +293,9 @@ void MainWindow::on_pushButton_open_picture_clicked()//打开一张图片
         MIN = configIniread->value("select_shape1/MIN").toInt();
 
         min = configIniread->value("select_shape2/min").toInt();
-
+        
+        
+        //将参数显示在textEdit上
         ui->textEdit_regiongrowing_row->setText(QString().setNum(Row));
 
         ui->textEdit_regiongrowing_colunm->setText(QString().setNum(Column));
@@ -411,7 +413,7 @@ void MainWindow::on_pushButton_handle_picture_clicked()
 
     HTuple hTuple = hv_Number;
 
-    Number = hTuple[0].I();//将缺陷个数赋给Number
+    Number = hTuple[0].I();//将缺陷个数赋给Number，由HTuple类型转换为int类型
 
   }
 
@@ -436,13 +438,13 @@ void MainWindow::on_pushButton_save_filepath_clicked()//将被处理的图片路
         }//插入路径和缺陷个数
 
 
-    if(query.exec("select *from regiongrowing"))//显示在tableWidget上
+    if(query.exec("select *from regiongrowing"))//将数据库内容显示在tableWidget上
         {
             //删除所有行
             ui->tableWidget->clearContents();
             ui->tableWidget->setRowCount(0);
 
-            while(query.next())
+            while(query.next())//显示在tableWidget上
             {
             int rowCount = ui->tableWidget->rowCount();
             ui->tableWidget->insertRow(rowCount);
